@@ -4,3 +4,7 @@ A PushBox Game written in C++ and SFML 2.5.1
 * [SFML 2.5.1](https://www.sfml-dev.org/download/sfml/2.5.1) - Graphics Library
 * [ImGui](https://github.com/ocornut/imgui) - UI rendering
 * [SQLite3](https://www.sqlite.org/version3.html) - Level Storing
+## Screenshots
+![alt text](https://raw.githubusercontent.com/AdamYuan/PushBoxSFML/master/screenshots/0.png)
+![alt text](https://raw.githubusercontent.com/AdamYuan/PushBoxSFML/master/screenshots/1.png)
+![alt text](https://raw.githubusercontent.com/AdamYuan/PushBoxSFML/master/screenshots/2.png)
