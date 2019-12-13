@@ -9,6 +9,9 @@ constexpr int kUiHeight = kBlockSize,
 constexpr int kEditorHoverAlpha = 128;
 constexpr float kErrorNotificationLifespan = 3.0f;
 constexpr int kUiItemWidth = 100;
+constexpr float kLightRadius = 128.0f;
+constexpr int kLightCircleDivision = 18;
+constexpr float kLightAngle = 3.14159265358979323846f * 2.0f / (float)kLightCircleDivision;
 
 struct ConstLevelEntry { int width, height; const char *str; };
 constexpr ConstLevelEntry kNewLevel = {
