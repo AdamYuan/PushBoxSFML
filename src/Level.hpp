@@ -24,7 +24,7 @@ class Level {
 		inline int clamp(int x, int mn, int mx) { return std::max(std::min(x, mx), mn); }
 
 	public:
-		inline bool CheckVictory() {
+		inline bool CheckVictory() const {
 			if(Empty()) return false;
 		
 			bool box_exist = false;
@@ -37,7 +37,7 @@ class Level {
 				}
 			return box_exist;
 		}
-		inline bool ExportToStr(std::string &ret) {
+		inline bool ExportToStr(std::string &ret) const {
 #define ERROR_EXIT(x) { \
 	pberr::push("EXPORT_LEVEL_ERR: " x); \
 	ret.clear(); \

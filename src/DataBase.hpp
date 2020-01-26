@@ -66,6 +66,14 @@ class DataBase {
 			sqlite3_bind_int(m_update_stmt, 4, id);
 			sqlite3_step(m_update_stmt);
 		}
+		inline void SaveLevel(int width, int height, const char *str, int id) {
+			sqlite3_reset(m_update_stmt);
+			sqlite3_bind_int(m_update_stmt, 1, width);
+			sqlite3_bind_int(m_update_stmt, 2, height);
+			sqlite3_bind_text(m_update_stmt, 3, str, -1, SQLITE_STATIC);
+			sqlite3_bind_int(m_update_stmt, 4, id);
+			sqlite3_step(m_update_stmt);
+		}
 		inline void SetDefault() {
 			sqlite3_exec(m_db, "DELETE FROM Levels;", nullptr, nullptr, nullptr);
 			for(auto &lvl : kDefaultLevels)
@@ -86,6 +94,7 @@ class DataBase {
 			sqlite3_exec(m_db, 
 						 "CREATE TABLE IF NOT EXISTS Levels (id INTEGER PRIMARY KEY, width INT, height INT, str TEXT);", 
 						 nullptr, nullptr, nullptr);
+
 			sqlite3_prepare_v2(m_db, "INSERT INTO Levels VALUES (?, ?, ?, ?);", 
 							   -1, &m_insert_stmt, nullptr);
 			sqlite3_prepare_v2(m_db, "DELETE FROM Levels WHERE id = ?;", 
@@ -113,6 +122,7 @@ class DataBase {
 			sqlite3_finalize(m_flip_stmt);
 			sqlite3_finalize(m_query_stmt);
 			sqlite3_finalize(m_update_stmt);
+
 			sqlite3_close(m_db);
 		}
 };

@@ -8,18 +8,23 @@ class LevelSwitch {
 	private:
 		int m_cur = -1;
 		bool m_editor = false;
-		uint8_t m_editor_cur = Block::kWall;
+		uint8_t m_editor_cur_block = Block::kWall;
 		int m_editor_x = 0, m_editor_y = 0;
+		DataBase &m_db;
+		Level &m_level;
+
 	public:
-		inline int GetCurrent() const { return m_cur; }
-		inline void Goto(Level &level, DataBase &db, int id) {
-			db.LoadLevel(level, (m_cur = id));
+		inline LevelSwitch(DataBase &database, Level &level) : m_db{database}, m_level{level} {}
+
+		inline int GetCurrentLevel() const { return m_cur; }
+		inline void GotoLevel(int id) {
+			m_db.LoadLevel(m_level, (m_cur = id));
 		}
-		inline void Reset(Level &level, DataBase &db) const {
-			db.LoadLevel(level, m_cur);
+		inline void Reset() const {
+			m_db.LoadLevel(m_level, m_cur);
 		}
-		inline void Save(Level &level, DataBase &db) const {
-			db.SaveLevel(level, m_cur);
+		inline void Save() const {
+			m_db.SaveLevel(m_level, m_cur);
 		}
 		inline bool &InEditor() { return m_editor; }
 		inline bool InEditor() const { return m_editor; }
@@ -27,34 +32,34 @@ class LevelSwitch {
 		inline int EditorX() const { return m_editor_x; }
 		inline int &EditorY() { return m_editor_y; }
 		inline int EditorY() const { return m_editor_y; }
-		inline bool EditorPosValid(Level &level) const { 
-			if(!level.IsValidPos(m_editor_x, m_editor_y)) return false; 
-			if(m_editor_cur == Block::kPlayer) {
-				uint8_t b = level.GetBlock(m_editor_x, m_editor_y);
+		inline bool EditorPosValid() const { 
+			if(!m_level.IsValidPos(m_editor_x, m_editor_y)) return false; 
+			if(m_editor_cur_block == Block::kPlayer) {
+				uint8_t b = m_level.GetBlock(m_editor_x, m_editor_y);
 				if(b == Block::kEmpty || b == Block::kTarget)
 					return true;
 				return false;
 			}
 			else return true;
 		}
-		inline bool EditorPut(Level &level) { //return whether it is modified
-			if(!EditorPosValid(level)) return false;
-			if(m_editor_cur == Block::kPlayer) {
-				if(m_editor_x == level.PlayerX() 
-				   && m_editor_y == level.PlayerY()) 
+		inline bool EditorPut() { //return whether it is modified
+			if(!EditorPosValid()) return false;
+			if(m_editor_cur_block == Block::kPlayer) {
+				if(m_editor_x == m_level.PlayerX() 
+				   && m_editor_y == m_level.PlayerY()) 
 					return false;
-				level.PlayerX() = m_editor_x;
-				level.PlayerY() = m_editor_y;
+				m_level.PlayerX() = m_editor_x;
+				m_level.PlayerY() = m_editor_y;
 			}
 			else {
-				if(level.GetBlock(m_editor_x, m_editor_y) == m_editor_cur)
+				if(m_level.GetBlock(m_editor_x, m_editor_y) == m_editor_cur_block)
 					return false;
-				level.GetBlock(m_editor_x, m_editor_y) = m_editor_cur;
+				m_level.GetBlock(m_editor_x, m_editor_y) = m_editor_cur_block;
 			}
 			return true;
 		}
-		inline uint8_t EditorCurrent() const { return m_editor_cur; }
-		inline uint8_t &EditorCurrent() { return m_editor_cur; }
+		inline uint8_t EditorCurrentBlock() const { return m_editor_cur_block; }
+		inline uint8_t &EditorCurrentBlock() { return m_editor_cur_block; }
 };
 
 #endif

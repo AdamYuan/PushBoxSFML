@@ -205,29 +205,33 @@ class Renderer {
 			m_hbuffer.clear(sf::Color::Transparent);
 			m_vbuffer.clear(sf::Color::Transparent);
 
-			sf::Shader::bind( &m_shadow_blur_shader );
+			//gaussian blur (fake ao)
+			{
+				sf::Shader::bind( &m_shadow_blur_shader );
 
-			m_shadow_blur_shader.setUniform("uDirection", sf::Vector2f{1, 0});
-			m_hbuffer.draw( sf::Sprite{ m_front_buffer.getTexture() } );
-			m_hbuffer.display();
+				m_shadow_blur_shader.setUniform("uDirection", sf::Vector2f{1, 0});
+				m_hbuffer.draw( sf::Sprite{ m_front_buffer.getTexture() } );
+				m_hbuffer.display();
 
-			m_shadow_blur_shader.setUniform("uDirection", sf::Vector2f{0, 1});
-			m_vbuffer.draw( sf::Sprite{ m_hbuffer.getTexture() } );
-			m_vbuffer.display();
+				m_shadow_blur_shader.setUniform("uDirection", sf::Vector2f{0, 1});
+				m_vbuffer.draw( sf::Sprite{ m_hbuffer.getTexture() } );
+				m_vbuffer.display();
 
-			m_shadow_blur_shader.setUniform("uDirection", sf::Vector2f{1, 0});
-			m_hbuffer.draw( sf::Sprite{ m_vbuffer.getTexture() } );
-			m_hbuffer.display();
+				m_shadow_blur_shader.setUniform("uDirection", sf::Vector2f{1, 0});
+				m_hbuffer.draw( sf::Sprite{ m_vbuffer.getTexture() } );
+				m_hbuffer.display();
 
-			m_shadow_blur_shader.setUniform("uDirection", sf::Vector2f{0, 1});
-			m_vbuffer.draw( sf::Sprite{ m_hbuffer.getTexture() } );
-			m_vbuffer.display();
+				m_shadow_blur_shader.setUniform("uDirection", sf::Vector2f{0, 1});
+				m_vbuffer.draw( sf::Sprite{ m_hbuffer.getTexture() } );
+				m_vbuffer.display();
 
-			sf::Shader::bind( nullptr );
+				sf::Shader::bind( nullptr );
 
-			target.draw( sf::Sprite{ m_vbuffer.getTexture() } );
+				target.draw( sf::Sprite{ m_vbuffer.getTexture() } );
+			}
 
 			target.draw( sf::Sprite{ m_front_buffer.getTexture() } );
+
 			target.draw( sf::Sprite{ m_light_buffer.getTexture() }, sf::BlendMultiply );
 		}
 };
